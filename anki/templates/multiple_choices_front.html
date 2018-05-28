@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Multiple Choice Template</title>
+  </head>
+
+  <body>
+    <div id="questions">
+      {{Question}}
+      <ol id="multiple_choices" type="a" />
+    </div>
+
+    <script type="application/javascript">
+      function shuffle(arr) {
+        var currentIndex = arr.length, temporaryValue, randomIndex ;
+
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+          // Pick a remaining element...
+          randomIndex = Math.floor(Math.random() * currentIndex);
+          currentIndex -= 1;
+          // And swap it with the current element.
+          temporaryValue = arr[currentIndex];
+          arr[currentIndex] = arr[randomIndex];
+          arr[randomIndex] = temporaryValue;
+        }
+
+        return arr;
+      }
+
+      var correct_one = "{{C1}}";
+      var correct_two = "{{C2}}";
+      var wrong_one = "{{W1}}";
+      var wrong_two = "{{W2}}";
+      var wrong_three = "{{W3}}";
+
+      var all = [correct_one, correct_two, wrong_one, wrong_two, wrong_three];
+      var cleaned_all = all.reduce(function(acc, curr) {
+        if (curr.length && curr[0] !== "(") {
+          acc.push(curr);
+        }
+        return acc;
+      }, []);
+
+      var buf = document.getElementById("multiple_choices");
+      var shuffled_all = shuffle(cleaned_all);
+      for (var i=0; i<shuffled_all.length; i++) {
+        var new_choice = document.createElement("li");
+        if (shuffled_all[i] === correct_one || shuffled_all[i] === correct_two) {
+          new_choice.setAttribute("class", "correct");
+        }
+        new_choice.innerHTML = shuffled_all[i];
+        buf.appendChild(new_choice);
+      }
+    </script>
+
+  </body>
+</html>
